@@ -13,6 +13,14 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
   end
+  
+  def sort_by_movie_title
+    @movies = Movie.order(:title)
+  end
+  
+  def sort_by_release_date
+    @movies = Movie.order(:release_date)
+  end
 
   def new
     # default: render 'new' template
