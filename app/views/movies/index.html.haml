@@ -4,10 +4,9 @@
 %table#movies
   %thead
     %tr
-      %th= link_to "Movie Title", sort_by_movie_title_movies_path
-      // %a{:href => "/movies/sort_by_movie_title", :title => "Movie Title" }
+      %th{:class => helper_class('title')}= link_to "Movie Title", :sort => "title", :id => 'title_header'
       %th Rating
-      %th= link_to "Release Date", sort_by_release_date_movies_path
+      %th{:class => helper_class('release_date')}= link_to "Release Date", :sort => "release_date", :id => 'release_date_header'
       %th More Info
   %tbody
     - @movies.each do |movie|
