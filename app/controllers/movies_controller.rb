@@ -11,22 +11,28 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @all_ratings =Movie.ratings#Movie.pluck(:rating).uniq
-    @ratings_hash = Hash[*@all_ratings.map {|key| [key, 1]}.flatten]
-    @movies = Movie.order(params[:sort]) 
-    if (params[:ratings] != nil)
-      @ratings_hash = params[:ratings]
-      @movies = @movies.search(@ratings_hash)
+    if params[:sort]
+      session[:sort] = params[:sort]
+      @movies = Movie.all.order(session[:sort])
+    elsif session[:sort]
+      @movies = Movie.all.order(session[:sort])
+    else
+      @movies = Movie.all
     end
+    
+    @all_ratings = Movie.ratings
+    
+    if params[:ratings]
+      session[:ratings] = params[:ratings]
+      @selected_ratings = session[:ratings].keys
+    elsif session[:ratings]
+      @selected_ratings = session[:ratings].keys
+    else
+      @selected_ratings = @all_ratings
+    end
+    
+    @movies =  @movies.where(:rating => @selected_ratings)
   end
-  
-  # def sort_by_movie_title
-  #   @movies = Movie.order(:title)
-  # end
-  
-  # def sort_by_release_date
-  #   @movies = Movie.order(:release_date)
-  # end
 
   def new
     # default: render 'new' template
